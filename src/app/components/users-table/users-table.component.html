@@ -1,0 +1,48 @@
+<ng-container *ngIf="users?.length">
+  <nz-table nzTableLayout="fixed" #basicTable [nzData]="users">
+    <thead>
+      <tr>
+        <th
+          *ngFor="let column of listOfColumns"
+          [nzSortOrder]="column.sortOrder"
+          [nzSortFn]="column.sortFn"
+          [nzSortDirections]="column.sortDirections"
+          [nzFilterMultiple]="column.filterMultiple"
+          [nzFilters]="column.listOfFilter"
+          [nzFilterFn]="column.filterFn"
+        >
+          {{ column.name }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of basicTable.data">
+        <td>{{ data.name }}</td>
+        <td>{{ data.username }}</td>
+        <td>{{ data.email }}</td>
+        <td>{{ data.phone }}</td>
+        <td>{{ data.website }}</td>
+        <td>
+          <button nz-button nzType="primary" (click)="showModal(data.address)">
+            Show Map
+          </button>
+        </td>
+      </tr>
+      <nz-modal
+        [(nzVisible)]="isVisible"
+        [nzTitle]="modalTitle"
+        [nzContent]="modalContent"
+        [nzFooter]="modalFooter"
+        (nzOnCancel)="handleCancel()"
+      >
+        <ng-template #modalTitle>Address</ng-template>
+
+        <ng-template #modalContent>
+          <app-leaflet-map [address]="selectedAddress"></app-leaflet-map>
+        </ng-template>
+
+        <ng-template #modalFooter></ng-template>
+      </nz-modal>
+    </tbody>
+  </nz-table>
+</ng-container>
